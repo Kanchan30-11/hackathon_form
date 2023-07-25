@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import { Button} from "@mui/material";
-//import { AiFillCheckCircle } from "react-icons/ai"; // You can use any icon library
-import StepOne from "./StepOne";
-import StepTwo from "./StepTwo";
-import StepThree from "./StepThree";
-import StepFour from "./Stepfour";
+import { Button, TextField, MenuItem, Select, FormControl } from "@mui/material";
+import './multistep.css'
 
-const steps = ["Step 1", "Step 2", "Step 3","Step 4"];
+const steps = ["Step 1", "Step 2", "Step 3", "Step 4"];
 
 const MultiStepForm = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -18,11 +14,11 @@ const MultiStepForm = () => {
     universityName: "",
     hackathonMode: "",
     hackathonTheme: "",
-    hackathonOverview:"",
-    registrationDate:"",
-    hackathonDate:"",
-    resultDate:"",
-    participants:""
+    hackathonOverview: "",
+    registrationDate: "",
+    hackathonDate: "",
+    resultDate: "",
+    participants: ""
   });
 
   const handleOpenModal = () => {
@@ -34,15 +30,15 @@ const MultiStepForm = () => {
     setActiveStep(0);
     setFormData({
       // Reset form data
-    hackathonName: "",
-    universityName: "",
-    hackathonMode: "",
-    hackathonTheme: "",
-    hackathonOverview:"",
-    registrationDate:"",
-    hackathonDate:"",
-    resultDate:"",
-    participants:""
+      hackathonName: "",
+      universityName: "",
+      hackathonMode: "",
+      hackathonTheme: "",
+      hackathonOverview: "",
+      registrationDate: "",
+      hackathonDate: "",
+      resultDate: "",
+      participants: ""
     });
   };
 
@@ -54,25 +50,148 @@ const MultiStepForm = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+
   const getStepContent = (stepIndex) => {
     switch (stepIndex) {
       case 0:
         return (
-          <StepOne formData={formData} setFormData={setFormData} />
+          <form>
+            <label>Hackathon Name* (You can change later)</label>
+            <TextField style={{ marginBottom: "16px" }} size="small"
+              name="hackathonName"
+              value={formData.hackathonName}
+              placeholder="eg: Design & Development "
+              onChange={handleInputChange}
+              fullWidth
+              required
+            />
+            <label>University/College Name* (You are representing)</label>
+            <TextField style={{ marginBottom: "16px" }} size="small"
+              name="universityName"
+              value={formData.universityName}
+              placeholder="eg: Bundelkhand University"
+              onChange={handleInputChange}
+              fullWidth
+              required
+            />
+            <label>Hackathon Mode</label>
+            <FormControl fullWidth>
+
+              <Select style={{ marginBottom: "16px" }}
+                size="small"
+                name="hackathonMode"
+                value={formData.hackathonMode}
+                placeholder="Online"
+                onChange={handleInputChange}
+                fullWidth
+                required
+              >
+
+                <MenuItem value="online">Online</MenuItem>
+                <MenuItem value="remote">Remote</MenuItem>
+              </Select>
+            </FormControl>
+          </form>
         );
       case 1:
         return (
-          <StepTwo formData={formData} setFormData={setFormData} />
+          <form>
+            <label>Hackathon Theme</label>
+            <TextField style={{ marginBottom: "16px" }}
+              size="small"
+              name="hackathonTheme"
+              value={formData.hackathonTheme}
+              placeholder="eg: Design & ML"
+              onChange={handleInputChange}
+              fullWidth
+              required
+            />
+            <label>"Hackathon Overview</label>
+            <TextField style={{ margin: "6px" }}
+              size="small"
+              name="hackathonOverview"
+              value={formData.hackathonOverview}
+              multiline // This enables the textarea functionality
+              rows={5} // You can adjust the number of rows displayed in the textarea
+              onChange={handleInputChange}
+              fullWidth
+              required
+            />
+          </form>
         );
       case 2:
         return (
-          <StepThree formData={formData} setFormData={setFormData}/>
+          <form>
+            <label >Registration Starting & Ending Date*</label>
+            <TextField style={{ marginBottom: "16px" }}
+              size="small"
+              name="registrationDate"
+              value={formData.registrationDate}
+              type="date"
+              onChange={handleInputChange}
+              fullWidth
+              required
+            />
+            <label >Hackathon Starting & Ending Date*</label>
+            <TextField style={{ marginBottom: "16px" }}
+              size="small"
+              name="hackthonDate"
+              value={formData.hackathonDate}
+              type="date"
+              onChange={handleInputChange}
+              fullWidth
+              required
+            />
+
+            <label >Result Date*</label>
+
+            <TextField style={{ marginBottom: "16px" }}
+              size="small"
+              name="resultDate"
+              value={formData.resultDate}
+              type="date"
+              onChange={handleInputChange}
+              fullWidth
+              required
+            />
+          </form>
         );
       case 3:
         return (
-          <StepFour formData={formData} setFormData={setFormData} />
+          <div>
+            <form>
+              <label>Who can participate?</label>
+              <FormControl fullWidth>
+                <Select style={{ marginTop: "16px" }}
+                  size="small"
+                  name="participants"
+                  value={formData.participants}
+                  placeholder="eg: Anyone"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                >
+
+                  <MenuItem value="anyone" selected>Anyone</MenuItem>
+                  <MenuItem value="school student">School Student </MenuItem>
+                  <MenuItem value="collefe student">College Student </MenuItem>
+                </Select>
+              </FormControl>
+              <p >
+                After reviewing your application we will publish, usually it takes 24 hours to review.
+                Need any help setting up ? Email us
+              </p>
+            </form>
+
+          </div>
         );
-    
+
       default:
         return "Unknown stepIndex";
     }
@@ -97,11 +216,11 @@ const MultiStepForm = () => {
             width: "450px",
             height: "500px",
             overflow: "auto",
-            
-            margin:"10px"
+
+            margin: "10px"
           }
-          
-    
+
+
         }}
         ariaHideApp={false}
       >
@@ -109,12 +228,12 @@ const MultiStepForm = () => {
         {getStepContent(activeStep)}
         <div style={{ marginTop: "16px" }}>
           {activeStep !== 0 && (
-            <Button onClick={handleBack} variant="outlined" style={{margin:"5px" }}>Back</Button>
+            <Button onClick={handleBack} variant="outlined" style={{ margin: "5px" }}>Back</Button>
           )}
           {activeStep !== steps.length - 1 ? (
-            <Button onClick={handleNext} variant="contained" style={{ margin:"5px"}}>Next</Button>
+            <Button onClick={handleNext} variant="contained" style={{ margin: "5px" }}>Next</Button>
           ) : (
-            <Button onClick={handleCloseModal} variant="contained" style={{margin:"5px" }}>Finish</Button>
+            <Button onClick={handleCloseModal} variant="contained" style={{ margin: "5px" }}>Finish</Button>
           )}
         </div>
       </Modal>
@@ -123,4 +242,3 @@ const MultiStepForm = () => {
 };
 
 export default MultiStepForm;
-
